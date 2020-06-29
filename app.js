@@ -11,6 +11,9 @@ const app = express()
 app.engine('.hbs', handlebars({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', '.hbs')
 
+// database settings
+const db = require('./models/index.js')
+
 // routes
 require('./routes/index.js')(app)
 
