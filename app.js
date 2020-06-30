@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 const db = require('./models/index.js')
 
 // routes
-require('./routes/index.js')(app)
+require('./routes/index.js')(app, passport)
 
 // start web server
 app.listen(PORT, () => {
