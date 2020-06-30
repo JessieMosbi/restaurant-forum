@@ -8,13 +8,14 @@ const handlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 const flash = require('connect-flash')
 const session = require('express-session')
+const passport = require('./config/passport.js')
 
 // web server settings
 const app = express()
 app.engine('.hbs', handlebars({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', '.hbs')
 
-// request go through other middleware
+// other middleware settings, request will go through this part
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -23,6 +24,8 @@ app.use(session({
   cookie: { maxAge: 60000 }
 }))
 app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
 
 // save local variables via Express for template to use
 app.use((req, res, next) => {
