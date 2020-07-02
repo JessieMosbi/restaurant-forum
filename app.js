@@ -9,6 +9,7 @@ const bodyParser = require('body-parser')
 const flash = require('connect-flash')
 const session = require('express-session')
 const passport = require('./config/passport.js')
+const methodOverride = require('method-override')
 
 // web server settings
 const app = express()
@@ -26,6 +27,7 @@ app.use(session({
 app.use(flash())
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(methodOverride('_method'))
 
 // save local variables via Express for template to use
 app.use((req, res, next) => {
