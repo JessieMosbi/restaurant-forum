@@ -140,7 +140,8 @@ const adminController = {
     if (file) {
       fs.readFile(file.path, (err, data) => {
         if (err) console.log('Error: ', err)
-        fs.writeFile(`upload/${file.originalname}`, data, () => {
+        fs.writeFile(`upload/${file.originalname}`, data, (err) => {
+          if (err) console.log(err)
           return Restaurant.findByPk(req.params.id)
             .then((restaurant) => {
               restaurant.update({
