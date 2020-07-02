@@ -13,3 +13,7 @@ package-lock.json
 *.gz
 #Other
 .env
+
+#this project
+temp/
+upload/
