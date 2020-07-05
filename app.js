@@ -21,8 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 60000 }
+  saveUninitialized: false
 }))
 app.use(flash())
 app.use(passport.initialize())
