@@ -19,7 +19,8 @@
     "protocol": "postgres",
     "dialectOptions": {
       "ssl": {
-        "rejectUnauthorized": false
+        "rejectUnauthorized": false,
+        "minVersion": "TLSv1"
       }
     }
   }
