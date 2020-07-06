@@ -194,18 +194,20 @@ const adminController = {
   },
 
   putUsers: (req, res) => {
+    let username
     return User.findByPk(req.params.id)
       .then(user => {
         if (user.email === 'root@example.com') {
           req.flash('error_messages', 'root can\'t be modified')
           return res.redirect('back')
         }
+        username = user.name
         return user.update({
           isAdmin: !user.isAdmin
         })
       })
       .then(() => {
-        req.flash('success_messages', 'user was successfully to update')
+        req.flash('success_messages', `${username} was successfully to update`)
         return res.redirect('back')
       })
       .catch(err => console.log(err))
