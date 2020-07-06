@@ -1,3 +1,5 @@
+{{>admin_menu}}
+
 {{#if restaurant}}
   <form action="/admin/restaurants/{{restaurant.id}}?_method=PUT" method="POST" enctype="multipart/form-data">
 {{else}}
