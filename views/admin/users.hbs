@@ -22,15 +22,19 @@
           {{/if}}
         </td>
         <td>
-          <form action="/admin/users/{{this.id}}?_method=PUT" method="POST" style="display: inline;">
-            <button type="submit" class="btn btn-link">
-              {{#if this.isAdmin}}
-                set as user
-              {{else}}
-                set as admin
-              {{/if}}
-            </button>
-          </form>
+          {{#if (ifEqual this.email 'root@example.com')}}
+            <span class="text-danger">admin (can't be modified)</span>
+          {{else}}
+            <form action="/admin/users/{{this.id}}?_method=PUT" method="POST" style="display: inline;">
+              <button type="submit" class="btn btn-link">
+                {{#if this.isAdmin}}
+                  set as user
+                {{else}}
+                  set as admin
+                {{/if}}
+              </button>
+            </form>
+          {{/if}}
         </td>
       </tr>
     {{/each}}

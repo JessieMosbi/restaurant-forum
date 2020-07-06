@@ -196,6 +196,10 @@ const adminController = {
   putUsers: (req, res) => {
     return User.findByPk(req.params.id)
       .then(user => {
+        if (user.email === 'root@example.com') {
+          req.flash('error_messages', 'root can\'t be modified')
+          return res.redirect('back')
+        }
         return user.update({
           isAdmin: !user.isAdmin
         })

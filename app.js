@@ -13,7 +13,7 @@ const methodOverride = require('method-override')
 
 // web server settings
 const app = express()
-app.engine('.hbs', handlebars({ defaultLayout: 'main', extname: '.hbs' }))
+app.engine('.hbs', handlebars({ defaultLayout: 'main', extname: '.hbs', helpers: require('./config/handlebarsHelper.js') }))
 app.set('view engine', '.hbs')
 
 // other middleware settings, request will go through this part
