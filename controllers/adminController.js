@@ -25,6 +25,26 @@ const adminController = {
     }
     const { file } = req // equal to const file = req.file
     if (file) {
+      imgur.setClientID(IMGUR_CLIENT_ID);
+      imgur.upload(file.path, (err, img) => {
+        if (err) console.log(err)
+        return Restaurant.findByPk(req.params.id)
+          .then((restaurant) => {
+            Restaurant.create({
+              name: req.body.name,
+              tel: req.body.tel,
+              address: req.body.address,
+              opening_hours: req.body.opening_hours,
+              description: req.body.description,
+              image: file ? img.data.link : null
+            }).then((restaurant) => {
+              req.flash('success_messages', 'restaurant was successfully created')
+              res.redirect('/admin/restaurants')
+            })
+          })
+      })
+
+      /*
       const readFile = (filePath) => {
         return new Promise((resolve, reject) => {
           fs.readFile(filePath, (err, data) => {
@@ -43,25 +63,6 @@ const adminController = {
         })
       }
 
-      imgur.setClientID(IMGUR_CLIENT_ID)
-      imgur.upload(file.path)
-        .then(img => {
-          return Restaurant.create({
-            name: req.body.name,
-            tel: req.body.tel,
-            address: req.body.address,
-            opening_hours: req.body.opening_hours,
-            description: req.body.description,
-            image: file ? img.data.link : null
-          })
-        })
-        .then(restaurant => {
-          req.flash('success_messages', 'restaurant was successfully created')
-          return res.redirect('/admin/restaurants')
-        })
-        .catch(err => console.log(err))
-
-      /*
       fs.readFile(file.path)
         .then(data => {
           return fs.writeFile(`upload/${file.originalname}`, data)
