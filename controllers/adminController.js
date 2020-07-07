@@ -47,11 +47,13 @@ const adminController = {
               address: req.body.address,
               opening_hours: req.body.opening_hours,
               description: req.body.description,
-              image: file ? img.data.link : null
-            }).then((restaurant) => {
-              req.flash('success_messages', 'restaurant was successfully created')
-              res.redirect('/admin/restaurants')
+              image: file ? img.data.link : null,
+              CategoryId: req.body.categoryId
             })
+              .then((restaurant) => {
+                req.flash('success_messages', 'restaurant was successfully created')
+                res.redirect('/admin/restaurants')
+              })
           })
       })
 
@@ -120,7 +122,8 @@ const adminController = {
         tel: req.body.tel,
         address: req.body.address,
         opening_hours: req.body.opening_hours,
-        description: req.body.description
+        description: req.body.description,
+        CategoryId: req.body.categoryId
       })
         .then((restaurant) => {
           req.flash('success_messages', 'restaurant was successfully created')
@@ -174,11 +177,13 @@ const adminController = {
               address: req.body.address,
               opening_hours: req.body.opening_hours,
               description: req.body.description,
-              image: file ? img.data.link : restaurant.image
-            }).then((restaurant) => {
-              req.flash('success_messages', 'restaurant was successfully to update')
-              res.redirect('/admin/restaurants')
+              image: file ? img.data.link : restaurant.image,
+              CategoryId: req.body.categoryId
             })
+              .then((restaurant) => {
+                req.flash('success_messages', 'restaurant was successfully to update')
+                res.redirect('/admin/restaurants')
+              })
           })
       })
     } else {
@@ -189,7 +194,8 @@ const adminController = {
             tel: req.body.tel,
             address: req.body.address,
             opening_hours: req.body.opening_hours,
-            description: req.body.description
+            description: req.body.description,
+            CategoryId: req.body.categoryId
           })
             .then(restaurant => {
               req.flash('success_messages', 'restaurant was successfully to update')
