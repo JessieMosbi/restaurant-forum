@@ -3,7 +3,7 @@ module.exports = {
     return String(value1) === String(value2)
   },
 
-  ifCond: function (a, b, options) {
+  ifCond: (a, b, options) => {
     if (a === b) {
       return options.fn(this)
     }
