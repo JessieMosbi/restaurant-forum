@@ -1,5 +1,6 @@
 const db = require('../models')
 const Category = db.Category
+const Restaurant = db.Restaurant
 
 const { Op } = require("sequelize");
 
@@ -85,5 +86,27 @@ const categoryController = {
         .catch(err => console.log(err))
     }
   },
+
+  deleteCategory: async (req, res) => {
+    // 查看分類底下是否有餐廳
+    const amount = await Restaurant.count({
+      where: { CategoryId: req.params.id }
+    })
+
+    return Category.findByPk(req.params.id)
+      .then(category => {
+        if (amount) {
+          req.flash('error_messages', `${category.name} do have some restaurant, can't be delete`)
+          return res.redirect('/admin/categories')
+        }
+        category.destroy()
+          .then(category => {
+            req.flash('success_messages', `${category.name} successfully delete`)
+            res.redirect('/admin/categories')
+          })
+          .catch(err => console.log(err))
+      })
+      .catch(err => console.log(err))
+  }
 }
 module.exports = categoryController
