@@ -1,17 +1,34 @@
+// params
+const pageLimit = 10
+
 const db = require('../models')
 const Restaurant = db.Restaurant
 const Category = db.Category
 
 const restController = {
   getRestaurants: (req, res) => {
+    let offset, page
     const whereQuery = {}
     const categoryId = Number(req.query.categoryId) || '' // 給 sequelize 需為數字
 
+    if (req.query.page) offset = (req.query.page - 1) * pageLimit
     if (categoryId) whereQuery.CategoryId = categoryId
 
-    return Restaurant.findAll({ include: Category, where: whereQuery })
-      .then(restaurants => {
-        const data = restaurants.map(r => ({
+    return Restaurant.findAndCountAll({
+      include: Category, where: whereQuery, offset, limit: pageLimit
+    })
+      .then(result => {
+        // data for pagination
+        const page = Number(req.query.page) || 1
+        const pages = Math.ceil(result.count / pageLimit)
+        const totalPage = Array.from({ length: pages }).map((item, index) => index + 1)
+        const prev = (page - 1 < 1) ? 1 : page - 1
+        const next = (page + 1 > pages) ? pages : page + 1
+
+        console.log(totalPage)
+
+        // clean up data
+        const data = result.rows.map(r => ({
           ...r.dataValues,
           description: r.description.substring(0, 50),
           categoryName: r.Category.name
@@ -25,7 +42,11 @@ const restController = {
             return res.render('restaurants', {
               restaurants: data,
               categories,
-              categoryId
+              categoryId,
+              page,
+              totalPage,
+              prev,
+              next
             })
           })
       })
