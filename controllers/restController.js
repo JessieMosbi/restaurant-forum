@@ -5,11 +5,9 @@ const Category = db.Category
 const restController = {
   getRestaurants: (req, res) => {
     const whereQuery = {}
-    const categoryId = Number(req.query.categoryId) // 給 sequelize 需為數字
+    const categoryId = Number(req.query.categoryId) || '' // 給 sequelize 需為數字
 
-    if (categoryId) {
-      whereQuery.CategoryId = categoryId
-    }
+    if (categoryId) whereQuery.CategoryId = categoryId
 
     return Restaurant.findAll({ include: Category, where: whereQuery })
       .then(restaurants => {
