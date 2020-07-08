@@ -3,15 +3,12 @@ module.exports = {
     return String(value1) === String(value2)
   },
 
-  ifCond: function (a, b, options) {
-    if (a === b) {
-      return options.fn(this)
-    }
-    return options.inverse(this)
+  ifNotEqual: function (value1, value2) {
+    return String(value1) !== String(value2)
   },
 
-  ifNotEqual: function (a, b, options) {
-    if (a !== b) {
+  ifCond: function (a, b, options) {
+    if (a === b) {
       return options.fn(this)
     }
     return options.inverse(this)

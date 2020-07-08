@@ -34,13 +34,13 @@
 
 <nav aria-label="Page navigation example">
   <ul class="pagination">
-    {{#ifNotEqual page prev}}
+    {{#if (ifNotEqual page prev)}}
       <li class="page-item">
         <a class="page-link" href="/restaurants?page={{prev}}&categoryId={{categoryId}}" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-    {{/ifNotEqual}}
+    {{/if}}
 
     {{#each totalPage}}
       {{#ifCond this ../page}}
@@ -51,12 +51,12 @@
       {{/ifCond}}
     {{/each}}
 
-    {{#ifNotEqual page next}}
+    {{#if (ifNotEqual page next)}}
       <li class="page-item">
         <a class="page-link" href="/restaurants?page={{next}}&categoryId={{categoryId}}" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
-    {{/ifNotEqual}}
+    {{/if}}
   </ul>
 </nav>
