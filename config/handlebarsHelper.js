@@ -1,9 +1,9 @@
 module.exports = {
-  ifEqual: (value1, value2) => {
+  ifEqual: function (value1, value2) {
     return String(value1) === String(value2)
   },
 
-  ifCond: (a, b, options) => {
+  ifCond: function (a, b, options) {
     if (a === b) {
       return options.fn(this)
     }
