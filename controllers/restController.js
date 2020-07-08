@@ -4,16 +4,32 @@ const Category = db.Category
 
 const restController = {
   getRestaurants: (req, res) => {
-    return Restaurant.findAll({ include: Category })
+    const whereQuery = {}
+    const categoryId = Number(req.query.categoryId) // 給 sequelize 需為數字
+
+    if (categoryId) {
+      whereQuery.CategoryId = categoryId
+    }
+
+    return Restaurant.findAll({ include: Category, where: whereQuery })
       .then(restaurants => {
         const data = restaurants.map(r => ({
           ...r.dataValues,
           description: r.description.substring(0, 50),
           categoryName: r.Category.name
         }))
-        return res.render('restaurants', {
-          restaurants: data
+
+        Category.findAll({
+          raw: true,
+          nest: true
         })
+          .then(categories => {
+            return res.render('restaurants', {
+              restaurants: data,
+              categories,
+              categoryId
+            })
+          })
       })
   },
 
