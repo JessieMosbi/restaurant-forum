@@ -8,5 +8,12 @@ module.exports = {
       return options.fn(this)
     }
     return options.inverse(this)
+  },
+
+  ifNotEqual: function (a, b, options) {
+    if (a !== b) {
+      return options.fn(this)
+    }
+    return options.inverse(this)
   }
 }
