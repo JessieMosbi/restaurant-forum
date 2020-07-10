@@ -53,6 +53,14 @@ const userController = {
         return res.render('profile', { profileUser: user.toJSON() })
       })
       .catch(err => console.log(err))
+  },
+
+  editUser: (req, res) => {
+    User.findByPk(req.params.id)
+      .then(user => {
+        return res.render('profileEdit', { profileUser: user.toJSON() })
+      })
+      .catch(err => console.log(err))
   }
 }
 
