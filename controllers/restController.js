@@ -1,5 +1,6 @@
 // params
 const pageLimit = 10
+let nowNavTab
 
 const db = require('../models')
 const Restaurant = db.Restaurant
@@ -9,6 +10,8 @@ const User = db.User
 
 const restController = {
   getRestaurants: (req, res) => {
+    nowNavTab = 'restaurant'
+
     let offset, page
     const whereQuery = {}
     const categoryId = Number(req.query.categoryId) || '' // 給 sequelize 需為數字
@@ -42,6 +45,7 @@ const restController = {
         })
           .then(categories => {
             return res.render('restaurants', {
+              nowNavTab,
               restaurants: data,
               categories,
               categoryId,
@@ -69,6 +73,8 @@ const restController = {
   },
 
   getFeeds: (req, res) => {
+    nowNavTab = 'feeds'
+
     return Restaurant.findAll({
       raw: true,
       nest: true,
@@ -86,6 +92,7 @@ const restController = {
         })
           .then(comments => {
             return res.render('feeds', {
+              nowNavTab,
               restaurants,
               comments
             })
