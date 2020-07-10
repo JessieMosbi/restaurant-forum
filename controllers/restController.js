@@ -66,9 +66,16 @@ const restController = {
       ]
     })
       .then(restaurant => {
-        return res.render('restaurant', {
-          restaurant: restaurant.toJSON()
+        // update viewCounts
+        restaurant.viewCounts++
+        return restaurant.save({
+          fields: ['viewCounts']
         })
+          .then(restaurant => {
+            return res.render('restaurant', {
+              restaurant: restaurant.toJSON()
+            })
+          })
       })
   },
 
