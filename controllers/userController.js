@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models/index.js')
 const User = db.User
+const Restaurant = db.Restaurant
+const Comment = db.Comment
 
 const fs = require('fs')
 const imgur = require('imgur-node-api')
@@ -52,9 +54,16 @@ const userController = {
   },
 
   getUser: (req, res) => {
-    User.findByPk(req.params.id)
+    User.findByPk(req.params.id, {
+      include: [
+        { model: Comment, include: Restaurant }
+      ]
+    })
       .then(user => {
-        return res.render('profile', { profileUser: user.toJSON() })
+        // console.log(user.toJSON())
+        // console.log(user.toJSON().Comments[0].Restaurant)
+        const commentCount = user.toJSON().Comments.length // TODO: 暫時有幾個評論就顯示幾個，不管評論的餐廳是否重複，因還沒找到 DISTINCT 怎麼用
+        return res.render('profile', { profileUser: user.toJSON(), commentCount })
       })
       .catch(err => console.log(err))
   },

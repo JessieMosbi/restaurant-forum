@@ -22,3 +22,25 @@
     </div>
   </div>
 </div>
+
+<div class="row mt-3">
+  <div class="col-md-6 m-auto text-center">
+    <div class="card">
+      <div class="card-header">
+        {{commentCount}} 已評論餐廳
+      </div>
+      <div class="card-body row">
+        {{#each profileUser.Comments}}
+          <blockquote class="blockquote mb-3 col-auto">
+            <a href="/restaurants/{{this.Restaurant.id}}">
+              <img src="{{this.Restaurant.image}}" alt="{{this.Restaurant.name}} image" class="img-thumbnail"
+                style="width: 100px; height: 100px;">
+              <br>
+              <h6 class="font-weight-light">{{this.Restaurant.name}}</h6>
+            </a>
+          </blockquote>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</div>
