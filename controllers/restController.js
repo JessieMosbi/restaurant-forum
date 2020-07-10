@@ -27,7 +27,7 @@ const restController = {
         const prev = (page - 1 < 1) ? 1 : page - 1
         const next = (page + 1 > pages) ? pages : page + 1
 
-        console.log(totalPage)
+        // console.log(totalPage)
 
         // clean up data
         const data = result.rows.map(r => ({
