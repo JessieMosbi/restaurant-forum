@@ -61,4 +61,7 @@ module.exports = (app, passport) => {
     failureFlash: true
   }), userController.signIn)
   app.get('/logout', userController.logout)
+
+  app.get('/password', authenticated, userController.editUserPassword)
+  app.put('/password', authenticated, userController.putUserPassword)
 }

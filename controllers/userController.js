@@ -102,6 +102,45 @@ const userController = {
             })
         })
     }
+  },
+
+  editUserPassword: (req, res) => {
+    // lock authorization for test accounts
+    let isEditable = 1
+    if (req.user.email === 'root@example.com' || req.user.email === 'user1@example.com' || req.user.email === 'user2@example.com') isEditable = ''
+
+    return res.render('password', { isEditable })
+  },
+
+  putUserPassword: (req, res) => {
+    if (!req.body.oldPassword.trim() || !req.body.newPassword.trim() || !req.body.newPasswordCheck.trim()) {
+      req.flash('error_messages', 'each column must be insert')
+      return res.redirect('back')
+    }
+
+    // confirm password
+    if (req.body.newPassword !== req.body.newPasswordCheck) {
+      req.flash('error_messages', 'Tow New Password is not the same！')
+      return res.redirect('back')
+    }
+
+    // check old password then update to new one
+    return User.findByPk(req.user.id)
+      .then(user => {
+        if (!bcrypt.compareSync(req.body.oldPassword, user.password)) {
+          req.flash('error_messages', 'Old Password is not correct！')
+          return res.redirect('back')
+        }
+
+        return user.update({
+          password: bcrypt.hashSync(req.body.newPassword, bcrypt.genSaltSync(10), null)
+        })
+      })
+      .then(user => {
+        req.flash('success_messages', 'user password was successfully to update')
+        res.redirect('/password')
+      })
+      .catch(err => console.log(err))
   }
 }
 
