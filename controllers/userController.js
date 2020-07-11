@@ -1,3 +1,6 @@
+// params
+let nowNavTab
+
 const bcrypt = require('bcryptjs')
 const db = require('../models/index.js')
 const User = db.User
@@ -202,6 +205,28 @@ const userController = {
             return res.redirect('back')
           })
       })
+  },
+
+  getTopUser: (req, res) => {
+    nowNavTab = 'userTop'
+
+    return User.findAll({
+      include: [
+        { model: User, as: 'Followers' }
+      ]
+    }).then(users => {
+      users = users.map(user => ({
+        ...user.dataValues,
+        FollowerCount: user.Followers.length,
+        isFollowed: req.user.Followings.map(d => d.id).includes(user.id)
+      }))
+      // 依追蹤者人數排序清單
+      users = users.sort((a, b) => b.FollowerCount - a.FollowerCount)
+      return res.render('topUser', {
+        users: users,
+        nowNavTab
+      })
+    })
   }
 }
 

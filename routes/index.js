@@ -24,6 +24,8 @@ module.exports = (app, passport) => {
     res.redirect('/signin')
   }
 
+  app.get('/users/top', authenticated, userController.getTopUser)
+
   app.get('/users/:id', authenticated, userController.getUser)
   app.get('/users/:id/edit', authenticated, userController.editUser)
   app.put('/users/:id/', authenticated, upload.single('image'), userController.putUser)
