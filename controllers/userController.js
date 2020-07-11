@@ -4,6 +4,7 @@ const User = db.User
 const Restaurant = db.Restaurant
 const Comment = db.Comment
 const Favorite = db.Favorite
+const Like = db.Like
 
 const fs = require('fs')
 const imgur = require('imgur-node-api')
@@ -158,7 +159,7 @@ const userController = {
       UserId: req.user.id,
       RestaurantId: req.params.restaurantId
     })
-      .then(restaurant => {
+      .then(favorite => {
         return res.redirect('back')
       })
   },
@@ -172,6 +173,31 @@ const userController = {
     })
       .then(favorite => {
         favorite.destroy()
+          .then(restaurant => {
+            return res.redirect('back')
+          })
+      })
+  },
+
+  addLike: (req, res) => {
+    return Like.create({
+      UserId: req.user.id,
+      RestaurantId: req.params.restaurantId
+    })
+      .then(like => {
+        return res.redirect('back')
+      })
+  },
+
+  removeLike: (req, res) => {
+    return Like.findOne({
+      where: {
+        UserId: req.user.id,
+        RestaurantId: req.params.restaurantId
+      }
+    })
+      .then(like => {
+        like.destroy()
           .then(restaurant => {
             return res.redirect('back')
           })
