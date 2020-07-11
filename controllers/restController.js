@@ -128,6 +128,33 @@ const restController = {
           commentCount: restaurant.Comments.length
         })
       })
+  },
+
+  getTopRestaurant: (req, res) => {
+    nowNavTab = 'resTop'
+
+    return Restaurant.findAll({
+      include: [
+        { model: User, as: 'FavoritedUsers' },
+        { model: User, as: 'LikedUsers' }
+      ]
+    })
+      .then(restaurants => {
+        restaurants = restaurants.map(r => ({
+          ...r.dataValues,
+          description: r.description.substring(0, 150),
+          FavoritedCount: r.FavoritedUsers.length,
+          isFavorited: r.FavoritedUsers.map(d => d.id).includes(req.user.id),
+          isLiked: r.LikedUsers.map(d => d.id).includes(req.user.id)
+        }))
+        // 收藏數最多的 10 筆
+        restaurants = restaurants.sort((a, b) => b.FavoritedCount - a.FavoritedCount)
+        restaurants = restaurants.filter((r, index) => index <= 9)
+        return res.render('topRestaurant', {
+          restaurants,
+          nowNavTab
+        })
+      })
   }
 }
 module.exports = restController
