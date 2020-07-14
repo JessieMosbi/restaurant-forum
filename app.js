@@ -41,7 +41,7 @@ const db = require('./models/index.js')
 
 // routes
 app.use('/upload', express.static(__dirname + '/upload'))
-require('./routes/index.js')(app, passport)
+require('./routes/index.js')(app)
 
 // start web server
 app.listen(PORT, () => {
