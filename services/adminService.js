@@ -27,6 +27,16 @@ const adminService = {
       .then(restaurant => {
         callback({ restaurant: restaurant.toJSON() })
       })
+  },
+
+  getCategories: (req, res, callback) => {
+    return Category.findAll({
+      raw: true,
+      nest: true
+    })
+      .then(categories => {
+        callback({ categories })
+      })
   }
 }
 
