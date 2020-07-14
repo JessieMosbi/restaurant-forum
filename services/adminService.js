@@ -16,7 +16,6 @@ const adminService = {
     })
       .then(restaurants => {
         callback({ restaurants: restaurants })
-        // return res.render('admin/restaurants', { restaurants: restaurants })
       })
   },
 
@@ -27,7 +26,6 @@ const adminService = {
     )
       .then(restaurant => {
         callback({ restaurant: restaurant.toJSON() })
-        // return res.render('admin/restaurant', { restaurant: restaurant.toJSON() })
       })
   }
 }
