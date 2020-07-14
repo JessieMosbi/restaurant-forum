@@ -25,7 +25,7 @@ const adminService = {
       { include: [Category] }
     )
       .then(restaurant => {
-        callback({ restaurant: restaurant.toJSON() })
+        callback({ restaurant })
       })
   },
 
