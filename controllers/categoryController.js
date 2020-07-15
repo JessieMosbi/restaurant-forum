@@ -38,40 +38,14 @@ const categoryController = {
   },
 
   putCategory: (req, res) => {
-    if (!req.body.name) {
-      req.flash('error_messages', 'name didn\'t exist')
-      return res.redirect('back')
-    } else {
-      return Category.findOne({
-        where: {
-          [Op.and]: [
-            { name: req.body.name },
-            {
-              id: {
-                [Op.ne]: req.params.id // 要排除自己，以防什麼都沒改就點更新
-              }
-            }
-          ]
-        }
-      })
-        .then(category => {
-          if (category) {
-            req.flash('error_messages', `${category.name} already exist`)
-            return res.redirect('back')
-          }
-          return Category.findByPk(req.params.id)
-            .then(category => {
-              console.log(req.body)
-              category.update(req.body)
-                .then(category => {
-                  req.flash('success_messages', `${category.name} successfully update`)
-                  res.redirect('/admin/categories')
-                })
-                .catch(err => console.log(err))
-            })
-        })
-        .catch(err => console.log(err))
-    }
+    adminService.putCategory(req, res, (data) => {
+      if (data.status === 'error') {
+        req.flash('error_messages', data.message)
+        return res.redirect('back')
+      }
+      req.flash('success_messages', data.message)
+      return res.redirect('/admin/categories')
+    })
   },
 
   deleteCategory: async (req, res) => {

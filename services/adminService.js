@@ -7,6 +7,8 @@ const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
+const { Op } = require("sequelize")
+
 const adminService = {
   getRestaurants: (req, res, callback) => {
     return Restaurant.findAll({
@@ -164,9 +166,8 @@ const adminService = {
 
   putCategory: (req, res, callback) => {
     const name = (req.body.name) ? req.body.name.trim() : req.body.name
-    if (!rname) {
-      req.flash('error_messages', 'name didn\'t exist')
-      return res.redirect('back')
+    if (!name) {
+      return callback({ status: 'error', message: 'name didn\'t exist' })
     } else {
       return Category.findOne({
         where: {
@@ -182,15 +183,13 @@ const adminService = {
       })
         .then(category => {
           if (category) {
-            req.flash('error_messages', `${category.name} already exist`)
-            return res.redirect('back')
+            return callback({ status: 'error', message: `${category.name} already exist` })
           }
           return Category.findByPk(req.params.id)
             .then(category => {
               category.update(req.body)
                 .then(category => {
-                  req.flash('success_messages', `${category.name} successfully update`)
-                  res.redirect('/admin/categories')
+                  return callback({ status: 'success', message: `${category.name} successfully create` })
                 })
                 .catch(err => console.log(err))
             })
