@@ -29,16 +29,6 @@ const adminService = {
       })
   },
 
-  getCategories: (req, res, callback) => {
-    return Category.findAll({
-      raw: true,
-      nest: true
-    })
-      .then(categories => {
-        callback({ categories })
-      })
-  },
-
   deleteRestaurant: (req, res, callback) => {
     return Restaurant.findByPk(req.params.id)
       .then(restaurant => {
@@ -139,7 +129,44 @@ const adminService = {
             })
         })
     }
-  }
+  },
+
+  getCategories: (req, res, callback) => {
+    return Category.findAll({
+      raw: true,
+      nest: true
+    })
+      .then(categories => {
+        callback({ categories })
+      })
+  },
+
+  postCategory: (req, res, callback) => {
+    const name = (req.body.name) ? req.body.name.trim() : req.body.name
+    if (!name) {
+      callback({ status: 'error', message: 'name didn\'t exist' })
+      // req.flash('error_messages', 'name didn\'t exist')
+      // return res.redirect('back')
+    } else {
+      return Category.findOne({
+        where: { name }
+      })
+        .then(category => {
+          if (category) {
+            callback({ status: 'error', message: `${category.name} already exist` })
+            // req.flash('error_messages', `${category.name} already exist`)
+            // return res.redirect('back')
+          }
+          return Category.create({ name })
+        })
+        .then(category => {
+          callback({ status: 'success', message: `${category.name} successfully create` })
+          // req.flash('success_messages', `${category.name} successfully create`)
+          // res.redirect('/admin/categories')
+        })
+        .catch(err => console.log(err))
+    }
+  },
 }
 
 module.exports = adminService
