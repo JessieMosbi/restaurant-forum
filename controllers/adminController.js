@@ -27,106 +27,14 @@ const adminController = {
   },
 
   postRestaurant: (req, res) => {
-    if (!req.body.name.trim()) {
-      req.flash('error_messages', "name didn't exist")
-      return res.redirect('back')
-    }
-    const { file } = req // equal to const file = req.file
-    if (file) {
-      imgur.setClientID(IMGUR_CLIENT_ID);
-      imgur.upload(file.path, (err, img) => {
-        if (err) console.log(err)
-        return Restaurant.findByPk(req.params.id)
-          .then((restaurant) => {
-            Restaurant.create({
-              name: req.body.name,
-              tel: req.body.tel,
-              address: req.body.address,
-              opening_hours: req.body.opening_hours,
-              description: req.body.description,
-              image: file ? img.data.link : null,
-              CategoryId: req.body.categoryId
-            })
-              .then((restaurant) => {
-                req.flash('success_messages', 'restaurant was successfully created')
-                res.redirect('/admin/restaurants')
-              })
-          })
-      })
-
-      /*
-      const readFile = (filePath) => {
-        return new Promise((resolve, reject) => {
-          fs.readFile(filePath, (err, data) => {
-            if (err) return reject(err)
-            return resolve(data)
-          })
-        })
+    adminService.postRestaurant(req, res, (data) => {
+      if (data.status === 'error') {
+        req.flash('error_messages', data.message)
+        return res.redirect('back')
       }
-
-      const writeFile = (targetFilePath, data) => {
-        return new Promise((resolve, reject) => {
-          fs.writeFile(targetFilePath, data, (err) => {
-            if (err) return reject(err)
-            return resolve()
-          })
-        })
-      }
-
-      fs.readFile(file.path)
-        .then(data => {
-          return fs.writeFile(`upload/${file.originalname}`, data)
-        })
-        .then(() => {
-          return Restaurant.create({
-            name: req.body.name,
-            tel: req.body.tel,
-            address: req.body.address,
-            opening_hours: req.body.opening_hours,
-            description: req.body.description,
-            image: file ? `/upload/${file.originalname}` : null
-          })
-        })
-        .then(restaurant => {
-          req.flash('success_messages', 'restaurant was successfully created')
-          return res.redirect('/admin/restaurants')
-        })
-        .catch(err => console.log(err))
-      */
-
-      /*
-      fs.readFile(file.path, (err, data) => {
-        if (err) console.log('Error: ', err)
-        fs.writeFile(`upload/${file.originalname}`, data, (err) => {
-          if (err) console.log(err)
-          return Restaurant.create({
-            name: req.body.name,
-            tel: req.body.tel,
-            address: req.body.address,
-            opening_hours: req.body.opening_hours,
-            description: req.body.description,
-            image: file ? `/upload/${file.originalname}` : null
-          }).then((restaurant) => {
-            req.flash('success_messages', 'restaurant was successfully created')
-            return res.redirect('/admin/restaurants')
-          })
-        })
-      })
-      */
-    } else {
-      return Restaurant.create({
-        name: req.body.name,
-        tel: req.body.tel,
-        address: req.body.address,
-        opening_hours: req.body.opening_hours,
-        description: req.body.description,
-        CategoryId: req.body.categoryId
-      })
-        .then((restaurant) => {
-          req.flash('success_messages', 'restaurant was successfully created')
-          res.redirect('/admin/restaurants')
-        })
-    }
+      req.flash('success_messages', data.message)
+      return res.redirect('/admin/restaurants')
+    })
   },
 
   getRestaurant: (req, res) => {
