@@ -18,6 +18,7 @@ app.set('view engine', '.hbs')
 
 // other middleware settings, request will go through this part
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json()) // open to parse json format data
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
