@@ -196,6 +196,26 @@ const adminService = {
         })
         .catch(err => console.log(err))
     }
+  },
+
+  deleteCategory: async (req, res, callback) => {
+    // 查看分類底下是否有餐廳
+    const amount = await Restaurant.count({
+      where: { CategoryId: req.params.id }
+    })
+
+    return Category.findByPk(req.params.id)
+      .then(category => {
+        if (amount) {
+          return callback({ status: 'error', message: `${category.name} do have some restaurant, can't be delete` })
+        }
+        category.destroy()
+          .then(category => {
+            return callback({ status: 'success', message: `${category.name} successfully delete` })
+          })
+          .catch(err => console.log(err))
+      })
+      .catch(err => console.log(err))
   }
 }
 
