@@ -69,22 +69,18 @@ const restController = {
         { model: User, as: 'LikedUsers' }
       ]
     })
-      .then(restaurant => {
+      .then(async (restaurant) => {
         // update viewCounts
-        restaurant.viewCounts++
-        return restaurant.save({
-          fields: ['viewCounts']
+        await restaurant.increment('viewCounts', { by: 1 })
+        const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id)
+        const isLiked = restaurant.LikedUsers.map(d => d.id).includes(req.user.id)
+        return res.render('restaurant', {
+          restaurant: restaurant.toJSON(),
+          isFavorited: isFavorited,
+          isLiked
         })
-          .then(restaurant => {
-            const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id)
-            const isLiked = restaurant.LikedUsers.map(d => d.id).includes(req.user.id)
-            return res.render('restaurant', {
-              restaurant: restaurant.toJSON(),
-              isFavorited: isFavorited,
-              isLiked
-            })
-          })
       })
+      .catch(err => console.log(err))
   },
 
   getFeeds: (req, res) => {
