@@ -60,16 +60,20 @@ const userController = {
   },
 
   getUser: (req, res) => {
+    const commentRestaurants = {}
+
     User.findByPk(req.params.id, {
       include: [
         { model: Comment, include: Restaurant }
       ]
     })
       .then(user => {
-        // console.log(user.toJSON())
-        // console.log(user.toJSON().Comments[0].Restaurant)
-        const commentCount = user.toJSON().Comments.length // TODO: 暫時有幾個評論就顯示幾個，不管評論的餐廳是否重複，因還沒找到 DISTINCT 怎麼用
-        return res.render('profile', { profileUser: user.toJSON(), commentCount })
+        user.toJSON().Comments.forEach((comment) => {
+          commentRestaurants[comment.RestaurantId] = comment.Restaurant
+        })
+
+        const commentCount = commentRestaurants.length
+        return res.render('profile', { profileUser: user.toJSON(), commentRestaurants, commentCount })
       })
       .catch(err => console.log(err))
   },

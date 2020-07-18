@@ -30,13 +30,13 @@
         {{commentCount}} 已評論餐廳
       </div>
       <div class="card-body row">
-        {{#each profileUser.Comments}}
+        {{#each commentRestaurants}}
           <blockquote class="blockquote mb-3 col-auto">
-            <a href="/restaurants/{{this.Restaurant.id}}">
-              <img src="{{this.Restaurant.image}}" alt="{{this.Restaurant.name}} image" class="img-thumbnail"
+            <a href="/restaurants/{{this.id}}">
+              <img src="{{this.image}}" alt="{{this.name}} image" class="img-thumbnail"
                 style="width: 100px; height: 100px;">
               <br>
-              <h6 class="font-weight-light">{{this.Restaurant.name}}</h6>
+              <h6 class="font-weight-light">{{this.name}}</h6>
             </a>
           </blockquote>
         {{/each}}
