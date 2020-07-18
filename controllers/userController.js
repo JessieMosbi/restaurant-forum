@@ -84,7 +84,7 @@ const userController = {
 
   putUser: (req, res) => {
     if (!req.body.name.trim()) {
-      req.flash('error_messages', 'name must exist')
+      req.flash('error_messages', 'Your name must be insert')
       return res.redirect('back')
     }
 
@@ -100,7 +100,7 @@ const userController = {
               image: file ? img.data.link : user.image
             })
               .then(user => {
-                req.flash('success_messages', 'user profile was successfully to update')
+                req.flash('success_messages', 'Your profile has been successfully updated')
                 res.redirect(`/users/${req.user.id}`)
               })
           })
@@ -112,7 +112,7 @@ const userController = {
             name: req.body.name
           })
             .then(user => {
-              req.flash('success_messages', 'user profile was successfully to update')
+              req.flash('success_messages', 'Your profile has been successfully updated')
               res.redirect(`/users/${req.user.id}`)
             })
         })
@@ -129,7 +129,7 @@ const userController = {
 
   putUserPassword: (req, res) => {
     if (!req.body.oldPassword.trim() || !req.body.newPassword.trim() || !req.body.newPasswordCheck.trim()) {
-      req.flash('error_messages', 'each column must be insert')
+      req.flash('error_messages', 'Each column must be insert')
       return res.redirect('back')
     }
 
@@ -152,7 +152,7 @@ const userController = {
         })
       })
       .then(user => {
-        req.flash('success_messages', 'user password was successfully to update')
+        req.flash('success_messages', 'Your password has been successfully updated')
         res.redirect('/password')
       })
       .catch(err => console.log(err))
